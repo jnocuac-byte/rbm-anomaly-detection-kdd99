@@ -82,7 +82,42 @@ pip install -r requirements.txt
 ```
 
 #### 3. Descargar el dataset
-Descarga el archivo `kddcup.data_10_percent.gz` desde el enlace de Kaggle y colócalo en la carpeta `archive/`.
+Fuente principal: Kaggle (dataset original usado en este proyecto).
+
+```powershell
+# Requiere tener Kaggle API configurada (kaggle.json)
+pip install kaggle
+New-Item -ItemType Directory -Force archive | Out-Null
+kaggle datasets download -d galaxyh/kdd-cup-1999-data -p archive
+Expand-Archive -Path "archive/kdd-cup-1999-data.zip" -DestinationPath "archive" -Force
+```
+
+Verificar que el archivo para este notebook exista:
+
+```powershell
+Get-ChildItem archive -Recurse | Where-Object { $_.Name -like "*kddcup.data_10_percent*" }
+```
+
+Si necesitas exactamente el archivo comprimido `kddcup.data_10_percent.gz`, puedes usar este espejo oficial (UCI):
+
+```powershell
+New-Item -ItemType Directory -Force archive | Out-Null
+Invoke-WebRequest -Uri "http://kdd.ics.uci.edu/databases/kddcup99/kddcup.data_10_percent.gz" -OutFile "archive/kddcup.data_10_percent.gz"
+```
+
+Verificar que el archivo existe:
+
+```powershell
+Get-Item "archive/kddcup.data_10_percent.gz"
+```
+
+Verificacion de integridad (hash SHA256):
+
+```powershell
+Get-FileHash "archive/kddcup.data_10_percent.gz" -Algorithm SHA256
+```
+
+Alternativa: tambien puedes descargarlo desde Kaggle y colocarlo manualmente en `archive/`.
 
 #### 4. Ejecutar notebooks
 Se recomienda ejecutar los notebooks en el siguiente orden:
